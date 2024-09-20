@@ -7,9 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:api": "npx openapi-typescript-codegen --input http://localhost:4000/api-json --output src/api && node scripts/post-generate.cjs"
   },
   "dependencies": {
+    "openapi-typescript-codegen": "^0.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

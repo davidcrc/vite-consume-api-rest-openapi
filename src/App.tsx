@@ -1,10 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import { CreateTaskDto, TasksService } from "./api";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState<CreateTaskDto[]>([]);
+
+  // Función para obtener las tareas
+  const fetchTasks = async () => {
+    try {
+      const response = await TasksService.tasksControllerGetTasks(); // Llamada a la API
+      setTasks(response); // Guardamos las tareas en el estado
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks(); // Obtener las tareas cuando el componente se monta
+  }, []);
 
   return (
     <>
@@ -17,19 +32,14 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Tasks {tasks.length}</h1>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.title}>{task.description}</li>
+        ))}
+      </ul>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
